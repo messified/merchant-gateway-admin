@@ -10,6 +10,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TopNavBarComponent } from './layout/top-nav-bar/top-nav-bar.component';
 import { BrandingComponent } from './layout/branding/branding.component';
 import { SideNavComponent } from './layout/side-nav/side-nav.component';
+import { LineChartService } from './admin/shared/line-chart/line-chart.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,9 +26,12 @@ import { SideNavComponent } from './layout/side-nav/side-nav.component';
     BrowserModule,
     AppRoutingModule,
     ChartsModule,
-    NgbModule
+    NgbModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    LineChartService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, BaseChartDirective, Label } from 'ng2-charts';
 import * as pluginAnnotations from 'chartjs-plugin-annotation';
+import { LineChartService } from './line-chart.service';
+import { transactionReport } from './transaction-report-data';
 
 @Component({
   selector: 'app-line-chart',
@@ -9,12 +11,8 @@ import * as pluginAnnotations from 'chartjs-plugin-annotation';
   styleUrls: ['./line-chart.component.scss']
 })
 export class LineChartComponent implements OnInit {
-  lineChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-    { data: [180, 480, 30, 90, 100, 270, 400], label: 'Series C', yAxisID: 'y-axis-1' }
-  ];
-  lineChartLabels: Label[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  lineChartData: ChartDataSets[] = [];
+  lineChartLabels: Label[];
   lineChartOptions: (ChartOptions & { annotation: any }) = {
     responsive: true,
     maintainAspectRatio: false,
@@ -25,16 +23,6 @@ export class LineChartComponent implements OnInit {
         {
           id: 'y-axis-0',
           position: 'left',
-        },
-        {
-          id: 'y-axis-1',
-          position: 'right',
-          gridLines: {
-            color: 'rgba(255,0,0,0.3)',
-          },
-          ticks: {
-            fontColor: '#212529',
-          }
         }
       ]
     },
@@ -82,16 +70,37 @@ export class LineChartComponent implements OnInit {
       pointHoverBorderColor: 'rgba(251, 19, 255, 1)'
     }
   ];
-  lineChartLegend = true;
+  lineChartLegend = false;
   lineChartType = 'line';
   lineChartPlugins = [pluginAnnotations];
 
+  transactionReport: any = transactionReport;
+
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
-  constructor() { }
+  constructor(private lineChartService: LineChartService) { }
 
   ngOnInit() {
+    const fiveDay = this.transactionReport.five_day;
+
+    const dailyTotals = fiveDay.map(group => {
+      return group.total;
+    });
+
+    this.lineChartData.push({
+      data: dailyTotals,
+      label: 'Five Day Report'
+    });
+
+    this.lineChartLabels = fiveDay.map(group => {
+      return group.day;
+    });
   }
+
+  // async getTransactionReport() {
+  //   this.transactionReport = await this.lineChartService.getTransactionReport();
+  //   console.log(this.transactionReport);
+  // }
 
   randomize(): void {
     for (let i = 0; i < this.lineChartData.length; i++) {
@@ -130,8 +139,8 @@ export class LineChartComponent implements OnInit {
   }
 
   changeColor() {
-    this.lineChartColors[2].borderColor = 'green';
-    this.lineChartColors[2].backgroundColor = `rgba(0, 255, 0, 0.3)`;
+    this.lineChartColors[2].borderColor = `rgb(239, 107, 53)`;
+    this.lineChartColors[2].backgroundColor = `rgb(239, 107, 53)`;
   }
 
   changeLabel() {
