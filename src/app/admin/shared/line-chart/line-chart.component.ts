@@ -74,14 +74,13 @@ export class LineChartComponent implements OnInit {
   lineChartType = 'line';
   lineChartPlugins = [pluginAnnotations];
 
-  transactionReport: any = transactionReport;
-
   @ViewChild(BaseChartDirective, { static: true }) chart: BaseChartDirective;
 
   constructor(private lineChartService: LineChartService) { }
 
-  ngOnInit() {
-    const fiveDay = this.transactionReport.five_day;
+  async ngOnInit() {
+    const transactionReportData: any = await this.lineChartService.getTransactionReport();
+    const fiveDay = transactionReportData.five_day;
 
     const dailyTotals = fiveDay.map(group => {
       return group.total;
@@ -92,15 +91,16 @@ export class LineChartComponent implements OnInit {
       label: 'Five Day Report'
     });
 
+    console.log(this.lineChartData);
+
     this.lineChartLabels = fiveDay.map(group => {
       return group.day;
     });
   }
 
-  // async getTransactionReport() {
-  //   this.transactionReport = await this.lineChartService.getTransactionReport();
-  //   console.log(this.transactionReport);
-  // }
+  async getTransactionReport() {
+    return await this.lineChartService.getTransactionReport();
+  }
 
   randomize(): void {
     for (let i = 0; i < this.lineChartData.length; i++) {

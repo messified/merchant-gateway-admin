@@ -12,6 +12,8 @@ import { BrandingComponent } from './layout/branding/branding.component';
 import { SideNavComponent } from './layout/side-nav/side-nav.component';
 import { LineChartService } from './admin/shared/line-chart/line-chart.service';
 import { HttpClientModule } from '@angular/common/http';
+import { DataTablesModule } from 'angular-datatables';
+import { DataTableComponent } from './admin/shared/data-table/data-table.component';
 
 @NgModule({
   declarations: [
@@ -20,14 +22,16 @@ import { HttpClientModule } from '@angular/common/http';
     LineChartComponent,
     TopNavBarComponent,
     BrandingComponent,
-    SideNavComponent
+    SideNavComponent,
+    DataTableComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ChartsModule,
     NgbModule,
-    HttpClientModule
+    HttpClientModule,
+    DataTablesModule
   ],
   providers: [
     LineChartService
